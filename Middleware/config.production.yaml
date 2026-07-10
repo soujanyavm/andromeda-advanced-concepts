@@ -1,0 +1,43 @@
+agents:
+   support_agent:
+      name: support_agent
+      model:
+         name: qwen3:8b
+         provider: litellm
+      tools:
+         - web_search
+      middleware:
+         tool_error_handler: true
+         guardrails:
+            input: true
+            output: true
+            tool: true
+         masking:
+            input: true
+            output: true
+            strategy: tokenize
+            token_prefix: pii
+            token_ttl_seconds: 86400
+         summarization:
+            trigger_tokens: 1500
+
+supervisor:
+   name: supervisor
+   model:
+      name: qwen3:8b
+      provider: litellm
+   enable_planning: true
+   middleware:
+      tool_error_handler: true
+      guardrails:
+         input: true
+         output: true
+         tool: false
+
+planner:
+   model:
+      name: qwen3:8b
+      provider: litellm
+
+report:
+   enabled: false
